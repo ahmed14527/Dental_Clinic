@@ -1,8 +1,8 @@
 from django.db import models
-from accounts.models import User
+from accounts.models import CustomUser
 
 class AppointmentSlot(models.Model):
-    doctor = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role': 'doctor'})
+    doctor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'doctor'})
     date = models.DateField()
     time = models.TimeField()
     is_booked = models.BooleanField(default=False)
@@ -11,7 +11,7 @@ class AppointmentSlot(models.Model):
         return f"{self.doctor.username} - {self.date} {self.time}"
 
 class Booking(models.Model):
-    patient = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role': 'patient'})
+    patient = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'patient'})
     slot = models.OneToOneField(AppointmentSlot, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -21,7 +21,7 @@ class Booking(models.Model):
     
     
 class AppointmentRequest(models.Model):
-    patient = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role': 'patient'})
+    patient = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'patient'})
     preferred_date = models.DateField()
     preferred_time = models.TimeField()
     notes = models.TextField(blank=True)

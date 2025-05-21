@@ -13,3 +13,6 @@ def send_booking_confirmation_email(email, patient_name, doctor_name, date, time
 نتمنى لك دوام الصحة والعافية.
 """
     send_mail(subject, message, None, [email])
+
+
+

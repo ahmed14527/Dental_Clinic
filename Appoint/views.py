@@ -24,33 +24,33 @@ class ThrottleMixin:
 
 # ----- Appointment Slot ----- 
 class AppointmentSlotViewSet(ThrottleMixin, viewsets.ModelViewSet):
-    queryset = AppointmentSlot.objects.all()  # Directly setting the queryset
-    serializer_class = AppointmentSlotSerializer  # Directly setting the serializer class
-    permission_classes = [IsAuthenticated]  # Ensure that only authenticated users can access this view
+    queryset = AppointmentSlot.objects.all()  
+    serializer_class = AppointmentSlotSerializer  
+    permission_classes = [IsAuthenticated]  
 
     def get_queryset(self):
         user = self.request.user
         if user.role == 'doctor':
-            return AppointmentSlot.objects.filter(doctor=user)  # Return only the slots assigned to the doctor
-        return AppointmentSlot.objects.all()  # Otherwise, return all slots
+            return AppointmentSlot.objects.filter(doctor=user) 
+        return AppointmentSlot.objects.all()  
 
     def perform_create(self, serializer):
-        serializer.save(doctor=self.request.user)  # Assign the logged-in user (doctor) to the slot
+        serializer.save(doctor=self.request.user)  
 
 
 # ----- Booking ----- 
 class BookingViewSet(ThrottleMixin, viewsets.ModelViewSet):
-    queryset = Booking.objects.all()  # Directly setting the queryset
-    serializer_class = BookingSerializer  # Directly setting the serializer class
-    permission_classes = [IsAuthenticated]  # Ensure that only authenticated users can access this view
+    queryset = Booking.objects.all()  
+    serializer_class = BookingSerializer 
+    permission_classes = [IsAuthenticated] 
 
     def get_queryset(self):
         user = self.request.user
         if user.role == 'patient':
-            return Booking.objects.filter(patient=user)  # Return bookings for the logged-in patient
+            return Booking.objects.filter(patient=user)  
         elif user.role == 'doctor':
-            return Booking.objects.filter(slot__doctor=user)  # Return bookings for the doctor
-        return Booking.objects.none()  # Return no bookings for other roles
+            return Booking.objects.filter(slot__doctor=user)  
+        return Booking.objects.none() 
 
     def perform_create(self, serializer):
         slot = serializer.validated_data['slot']
@@ -76,20 +76,20 @@ class BookingViewSet(ThrottleMixin, viewsets.ModelViewSet):
 
 # ----- Appointment Request ----- 
 class AppointmentRequestViewSet(ThrottleMixin, viewsets.ModelViewSet):
-    queryset = AppointmentRequest.objects.all()  # Directly setting the queryset
-    serializer_class = AppointmentRequestSerializer  # Directly setting the serializer class
-    permission_classes = [IsAuthenticated]  # Ensure that only authenticated users can access this view
+    queryset = AppointmentRequest.objects.all()  
+    serializer_class = AppointmentRequestSerializer  
+    permission_classes = [IsAuthenticated] 
 
     def get_queryset(self):
         user = self.request.user
         if user.role == 'patient':
-            return AppointmentRequest.objects.filter(patient=user)  # Return requests for the logged-in patient
+            return AppointmentRequest.objects.filter(patient=user) 
         elif user.role in ['doctor', 'admin']:
-            return AppointmentRequest.objects.all()  # Return all requests for doctors and admins
-        return AppointmentRequest.objects.none()  # Return no requests for other roles
+            return AppointmentRequest.objects.all()  
+        return AppointmentRequest.objects.none() 
 
     def perform_create(self, serializer):
-        serializer.save(patient=self.request.user)  # Save the appointment request with the logged-in patient
+        serializer.save(patient=self.request.user)  
 
 
 class UpdateUrgentBookingStatus(APIView):

@@ -53,7 +53,7 @@ INSTALLED_APPS = [
 FIREBASE_SERVICE_ACCOUNT_FILE = os.path.join(BASE_DIR, 'online_clinic/key.json')
 
 
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 
 
