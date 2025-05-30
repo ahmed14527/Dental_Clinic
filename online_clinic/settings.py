@@ -162,7 +162,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+import django_heroku
+import dj_database_url
+
+# تفعيل Heroku settings
+django_heroku.settings(locals())
+
+# إعدادات whitenoise
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'accounts/static')]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
